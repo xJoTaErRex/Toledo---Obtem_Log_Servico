@@ -29,7 +29,7 @@ namespace ObtemLogForms
         private void btnConsultar_Click(object sender, EventArgs e)
         {
             string servico = "LMPService";
-            string nomeMaquina = "CE230";
+            string fonteEvento = "srvTBROCR";
             string caminhoLog = @"D:\dados.txt";
             string log;
 
@@ -40,9 +40,9 @@ namespace ObtemLogForms
                 {
                     servico = cbServicosAtivos.SelectedItem.ToString();
                 }
-                if (!string.IsNullOrEmpty(txtNomeMaquina.Text))
+                if (!string.IsNullOrEmpty(txtFonteErroEventViewer.Text))
                 {
-                    nomeMaquina = txtNomeMaquina.Text;
+                   fonteEvento = txtFonteErroEventViewer.Text;
                 }
                 if (!string.IsNullOrEmpty(txtCaminhoArquivoLog.Text))
                 {
@@ -74,7 +74,7 @@ namespace ObtemLogForms
 
                     File.AppendAllText(caminhoLog, log);
 
-                    string res = Environment.NewLine + Helper.GetEventLogData(DateTime.Today, nomeMaquina, log);
+                    string res = Environment.NewLine + Helper.GetEventLogData(DateTime.Today, Environment.MachineName, log, fonteEvento);
                     txtLog.Text += res;
                     lblAvisoHeadtxt.Text = "Obtendo log do serviço " + servico;
                     lblAvisoRodapé.Text = "O arquivo de log dados.txt foi salvo no caminho " + caminhoLog;

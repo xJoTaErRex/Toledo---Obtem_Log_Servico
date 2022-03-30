@@ -16,7 +16,7 @@ namespace ObtemLogForms
 {
     class Helper
     {
-        public static bool executa; 
+        public static bool executa;
 
 
         /// <summary>
@@ -27,14 +27,15 @@ namespace ObtemLogForms
         /// <param name="start"> Data de inicio </param>
         /// <param name="maquina"> Nome da Maquina utilizada</param>
         /// <param name="retorno"> String de log sem os dados do Event Viewer </param>
+        /// <param name="fonte"> String com o nome da fonte dos erros no Event Viewer </param>
         /// <returns>Retorna a string de retorno com os dados do Event Viwer</returns>
-        public static string GetEventLogData(DateTime start, string maquina, string retorno)
+        public static string GetEventLogData(DateTime start, string maquina, string retorno, string fonte)
         {
             var log = new EventLog("Application", maquina);
-            string sourceName = "srvTBROCR";
+            //tring sourceName = "srvTBROCR";
             string mensagem;
 
-            log.Source = sourceName;
+            log.Source = fonte; //sourceName;
             int aux = 0;
             foreach (EventLogEntry entry in log.Entries)
             {
@@ -42,7 +43,7 @@ namespace ObtemLogForms
                     (entry.TimeGenerated >= start) && entry.Source == log.Source)
                 {
                     aux++;
-                    Console.WriteLine("Error in Event Log:\n" + entry.Message + "\n");
+                    //Console.WriteLine("Error in Event Log:\n" + entry.Message + "\n");
                 }
 
             }
@@ -77,12 +78,6 @@ namespace ObtemLogForms
                 string nomeProcesso = (string)process["Name"];
                 combo.Items.Add(nomeProcesso.Replace(".exe", null));
             }
-
-        }
-
-        public static void teste(TextBox teste, string texto)
-        {
-            teste.Text = texto;
 
         }
 

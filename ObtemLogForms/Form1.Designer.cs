@@ -30,22 +30,22 @@ namespace ObtemLogForms
         private void InitializeComponent()
         {
             this.btnConsultar = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.txtLog = new System.Windows.Forms.TextBox();
             this.txtCaminhoArquivoLog = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.lblAvisoRodapé = new System.Windows.Forms.Label();
             this.cbServicosAtivos = new System.Windows.Forms.ComboBox();
-            this.txtNomeMaquina = new System.Windows.Forms.TextBox();
             this.btnParar = new System.Windows.Forms.Button();
             this.btnLimparCaixaDeTexto = new System.Windows.Forms.Button();
             this.lblAvisoHeadtxt = new System.Windows.Forms.Label();
+            this.txtFonteErroEventViewer = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // btnConsultar
             // 
-            this.btnConsultar.Location = new System.Drawing.Point(881, 35);
+            this.btnConsultar.Location = new System.Drawing.Point(905, 34);
             this.btnConsultar.Name = "btnConsultar";
             this.btnConsultar.Size = new System.Drawing.Size(234, 57);
             this.btnConsultar.TabIndex = 0;
@@ -53,19 +53,10 @@ namespace ObtemLogForms
             this.btnConsultar.UseVisualStyleBackColor = true;
             this.btnConsultar.Click += new System.EventHandler(this.btnConsultar_Click);
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(570, 20);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(94, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Nome da Maquina";
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(244, 20);
+            this.label2.Location = new System.Drawing.Point(315, 19);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(89, 13);
             this.label2.TabIndex = 2;
@@ -83,7 +74,7 @@ namespace ObtemLogForms
             // txtCaminhoArquivoLog
             // 
             this.txtCaminhoArquivoLog.CausesValidation = false;
-            this.txtCaminhoArquivoLog.Location = new System.Drawing.Point(247, 118);
+            this.txtCaminhoArquivoLog.Location = new System.Drawing.Point(318, 117);
             this.txtCaminhoArquivoLog.Name = "txtCaminhoArquivoLog";
             this.txtCaminhoArquivoLog.Size = new System.Drawing.Size(234, 20);
             this.txtCaminhoArquivoLog.TabIndex = 7;
@@ -91,7 +82,7 @@ namespace ObtemLogForms
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(244, 102);
+            this.label3.Location = new System.Drawing.Point(315, 101);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(227, 13);
             this.label3.TabIndex = 6;
@@ -109,23 +100,15 @@ namespace ObtemLogForms
             // cbServicosAtivos
             // 
             this.cbServicosAtivos.FormattingEnabled = true;
-            this.cbServicosAtivos.Location = new System.Drawing.Point(247, 35);
+            this.cbServicosAtivos.Location = new System.Drawing.Point(318, 34);
             this.cbServicosAtivos.Name = "cbServicosAtivos";
             this.cbServicosAtivos.Size = new System.Drawing.Size(234, 21);
             this.cbServicosAtivos.Sorted = true;
             this.cbServicosAtivos.TabIndex = 9;
             // 
-            // txtNomeMaquina
-            // 
-            this.txtNomeMaquina.CausesValidation = false;
-            this.txtNomeMaquina.Location = new System.Drawing.Point(573, 36);
-            this.txtNomeMaquina.Name = "txtNomeMaquina";
-            this.txtNomeMaquina.Size = new System.Drawing.Size(234, 20);
-            this.txtNomeMaquina.TabIndex = 3;
-            // 
             // btnParar
             // 
-            this.btnParar.Location = new System.Drawing.Point(881, 118);
+            this.btnParar.Location = new System.Drawing.Point(905, 117);
             this.btnParar.Name = "btnParar";
             this.btnParar.Size = new System.Drawing.Size(234, 57);
             this.btnParar.TabIndex = 10;
@@ -151,11 +134,30 @@ namespace ObtemLogForms
             this.lblAvisoHeadtxt.Size = new System.Drawing.Size(0, 13);
             this.lblAvisoHeadtxt.TabIndex = 12;
             // 
+            // txtFonteErroEventViewer
+            // 
+            this.txtFonteErroEventViewer.CausesValidation = false;
+            this.txtFonteErroEventViewer.Location = new System.Drawing.Point(627, 35);
+            this.txtFonteErroEventViewer.Name = "txtFonteErroEventViewer";
+            this.txtFonteErroEventViewer.Size = new System.Drawing.Size(234, 20);
+            this.txtFonteErroEventViewer.TabIndex = 14;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(624, 19);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(194, 13);
+            this.label1.TabIndex = 13;
+            this.label1.Text = "Nome da fonte do erro no Event Viewer";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1370, 702);
+            this.Controls.Add(this.txtFonteErroEventViewer);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.lblAvisoHeadtxt);
             this.Controls.Add(this.btnLimparCaixaDeTexto);
             this.Controls.Add(this.btnParar);
@@ -164,9 +166,7 @@ namespace ObtemLogForms
             this.Controls.Add(this.txtCaminhoArquivoLog);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.txtLog);
-            this.Controls.Add(this.txtNomeMaquina);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.btnConsultar);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -181,17 +181,17 @@ namespace ObtemLogForms
         #endregion
 
         private System.Windows.Forms.Button btnConsultar;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtLog;
         private System.Windows.Forms.TextBox txtCaminhoArquivoLog;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label lblAvisoRodapé;
         private System.Windows.Forms.ComboBox cbServicosAtivos;
-        private System.Windows.Forms.TextBox txtNomeMaquina;
         private System.Windows.Forms.Button btnParar;
         private System.Windows.Forms.Button btnLimparCaixaDeTexto;
         private System.Windows.Forms.Label lblAvisoHeadtxt;
+        private System.Windows.Forms.TextBox txtFonteErroEventViewer;
+        private System.Windows.Forms.Label label1;
     }
 }
 
