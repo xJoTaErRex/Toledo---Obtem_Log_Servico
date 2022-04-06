@@ -15,8 +15,11 @@ INFORMAÇÕES do LOG:
 METODOS:
 
   EfetuaLeituraGravacaoLog(DateTime.Today)                -> Concatenar as informação se há ou não erro(s) da aplicação no Event Viewer.
+  
   CompletaComboServicosAtivos                             -> Monta uma combobox com os serviços ativos na maquina.
+  
   EfetuaLeituraGravacaoLog                                -> Metodo principal que efetua leitura dos log e gravação no arquivo txt.
+  
   DesabilitaHabilitaCampos                                -> Desabilita botões e campos de acordo com botão apertado.
 
   Desenvolvido por Junior Freitas e Michell Seidl
