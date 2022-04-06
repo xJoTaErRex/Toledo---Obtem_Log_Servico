@@ -1,5 +1,5 @@
 # Toledo---Obtem_Log_Servico
-Programa desenvolvido para extrair informações de uma aplicação do sistema:
+Programa desenvolvido para extrair informações de uma aplicação do sistema e grava-lo em um arquivo .txt
                          
           
 INFORMAÇÕES do LOG:
