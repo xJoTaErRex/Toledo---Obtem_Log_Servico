@@ -16,88 +16,160 @@ namespace ObtemLogForms
 {
     public partial class Form1 : Form
     {
+        #region Variaveis e Metodos
 
+        string nomeArquivo;
+        string servico = "TBR_SRV_OCR";
+        string caminhoLogPadrao = @"C:\";
+        string fonteDoEvento = "srvTBROCR";
+        string caminhoLog;
+        int segundos = 5;
+        Thread t;
 
+        /// <summary>
+        /// Método habilita e desabilita campos do forms, de acordo com o botão pressionado
+        /// </summary>
+        /// <param name="valida"> Boleano que indica quais campos habilitar ou desabilitar </param>
+        /// <returns>Sem retorno</returns>
+        public void DesabilitaHabilitaCampos(bool valida)
+        {
+            if (valida)
+            {
+                if (ckbEventViewer.Checked == true)
+                {
+                    txtFonteErroEventViewer.Enabled = true;
+                }
+                ckbEventViewer.Enabled = true;
+                nudTempoGravacao.Enabled = true;
+                txtCaminhoArquivoLog.Enabled = true;
+                txtServico.Enabled = true;
+                btnConsultar.Enabled = true;
+                btnParar.Enabled = false;
+
+            }
+            else
+            {
+                ckbEventViewer.Enabled = false;
+                txtFonteErroEventViewer.Enabled = false;
+                nudTempoGravacao.Enabled = false;
+                txtCaminhoArquivoLog.Enabled = false;
+                txtServico.Enabled = false;
+                btnConsultar.Enabled = false;
+                btnParar.Enabled = true;
+            }
+        }
+
+        #endregion
+
+        #region Forms
         public Form1()
         {
             InitializeComponent();
-            Helper.CompletaComboServicosAtivos(cbServicosAtivos);
-            Helper.executa = true;
-        }
+            //Helper.CompletaComboServicosAtivos(cbServicosAtivos);
+            txtCaminhoArquivoLog.Text = caminhoLogPadrao;
+            txtServico.Text = servico;
+            txtFonteErroEventViewer.Text = fonteDoEvento;
+            nudTempoGravacao.Text = segundos.ToString();
+            btnParar.Enabled = false;
 
+        }
 
         private void btnConsultar_Click(object sender, EventArgs e)
         {
-            string servico = "LMPService";
-            string fonteEvento = "srvTBROCR";
-            string caminhoLog = @"D:\dados.txt";
-            string log;
 
-            try
+            if (txtServico.Text != "")
             {
+                epValidaServicoNull.Clear();
+                DesabilitaHabilitaCampos(false);
 
-                if (cbServicosAtivos.SelectedItem != null)
+                servico = txtServico.Text;
+                if (servico.Contains(".exe"))  //caso o usuario digite .exe no final do nome do serviço, com .exe o serviço não é encontrado 
                 {
-                    servico = cbServicosAtivos.SelectedItem.ToString();
+                    servico = servico.Replace(".exe", null);
                 }
+
+                nomeArquivo = "Log" + servico;
+
+
+                if (!string.IsNullOrEmpty(nudTempoGravacao.Text))
+                {
+                    segundos = Convert.ToInt32(nudTempoGravacao.Text);
+                }
+
                 if (!string.IsNullOrEmpty(txtFonteErroEventViewer.Text))
                 {
-                   fonteEvento = txtFonteErroEventViewer.Text;
-                }
-                if (!string.IsNullOrEmpty(txtCaminhoArquivoLog.Text))
-                {
-                    caminhoLog = txtCaminhoArquivoLog.Text;
+                    fonteDoEvento = txtFonteErroEventViewer.Text;
                 }
 
-                Process[] processlist = Process.GetProcessesByName(servico);
-
-                foreach (Process theprocess in Process.GetProcessesByName(servico))
+                if (!string.IsNullOrEmpty(txtCaminhoArquivoLog.Text) && txtCaminhoArquivoLog.Text != caminhoLogPadrao) //Verifica se o campo do caminho esta vazio e se o que ele possui é o caminho padrão
                 {
-                    var counter = new PerformanceCounter("Process", "Working Set - Private", servico);
-                    var cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
-                    int usage = (int)cpuCounter.NextValue();
-
-                    while (usage == 0 || usage > 100)
+                    if (txtCaminhoArquivoLog.Text.EndsWith(@"\")) //Verifica se o usuario colocou "\" no final do caminho, caso contrario adiciona
                     {
-                        Thread.Sleep(250);
-                        usage = (int)cpuCounter.NextValue();
+                        caminhoLog = txtCaminhoArquivoLog.Text + nomeArquivo;
                     }
-
-                    log = DateTime.Now +
-                            "Nome: ".PadLeft(25) + theprocess.ProcessName.ToString() +
-                            "PID: ".PadLeft(25) + theprocess.Id.ToString() +
-                            "Threads: ".PadLeft(25) + theprocess.Threads.Count +
-                            "Handles: ".PadLeft(25) + theprocess.HandleCount +
-                            "Memória (conjunto de trabalho privado ativo): ".PadLeft(50) + counter.RawValue / 1024 + "K" +
-                            "CPU: ".PadLeft(25) + usage + "%".PadLeft(3) + " ".PadLeft(15) +
-                            "Tempo de CPU: ".PadLeft(10) + theprocess.TotalProcessorTime.TotalSeconds.ToString("N2");
-
-                    File.AppendAllText(caminhoLog, log);
-
-                    string res = Environment.NewLine + Helper.GetEventLogData(DateTime.Today, Environment.MachineName, log, fonteEvento);
-                    txtLog.Text += res;
-                    lblAvisoHeadtxt.Text = "Obtendo log do serviço " + servico;
-                    lblAvisoRodapé.Text = "O arquivo de log dados.txt foi salvo no caminho " + caminhoLog;
-
+                    else
+                    {
+                        caminhoLog = txtCaminhoArquivoLog.Text + @"\" + nomeArquivo;
+                    }
                 }
+                else
+                {
+                    txtCaminhoArquivoLog.Text = caminhoLogPadrao;
+                    caminhoLog = caminhoLogPadrao + nomeArquivo;
+                }
+
+
+                t = new Thread(() => LogServicos.EfetuaLeituraGravacaoLog(servico, caminhoLog, segundos, fonteDoEvento, ckbEventViewer));
+                t.Start();
+
+                pnStatus.BackColor = Color.Green;
+
+                txtLog.Text = "OBTENDO LOG DO SERVIÇO: " + servico + Environment.NewLine + Environment.NewLine +
+                               "O programa esta em execução, gravando os logs no arquivo txt, pare ou feche o programa, e abra o arquivo para verificar os resultados obtidos!";
+                lblAvisoRodapé.Text = "O arquivo de log: " + nomeArquivo + "{Data atual}, foi salvo no caminho:   " + caminhoLog + "{Data atual}.txt";
+
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show("Erro inesperado, " + ex.Message, "Help Caption", MessageBoxButtons.OK,
-                                   MessageBoxIcon.Error);
-            } 
+                epValidaServicoNull.SetError(txtServico, "Escreva o nome de um serviço");
+            }
 
         }
 
         private void btnParar_Click(object sender, EventArgs e)
         {
-            Helper.executa = false;
+            DesabilitaHabilitaCampos(true);
+
+            pnStatus.BackColor = Color.Red;
+
+            t.Abort();
+
+            txtLog.Text = "O PROGRAMA ESTA PARADO" + Environment.NewLine + Environment.NewLine + "abra o arquivo .txt para verificar os resultados";
         }
 
-        private void btnLimparCaixaDeTexto_Click(object sender, EventArgs e)
+        private void ckbEventViewer_CheckedChanged(object sender, EventArgs e)
         {
-            txtLog.Text = null;
+            if (ckbEventViewer.Checked == false)
+            {
+                txtFonteErroEventViewer.Enabled = false;
+            }
+            else
+            {
+                txtFonteErroEventViewer.Enabled = true;
+            }
+
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (t != null)
+            {
+                t.Abort();
+            }
         }
     }
+
+    #endregion
+
 }
   
